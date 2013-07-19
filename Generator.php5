@@ -37,5 +37,38 @@
  *	@since			0.3.0
  *	@version		$Id$
  */
-class CMM_OGP_Abstract{}
+class CMM_OGP_Generator{
+
+	public static function renderMetaTag( $property, $content ){
+		$attributes	= array( 'property' => $property, 'content' => $content );
+		return UI_HTML_Tag::create( 'meta', NULL, $attributes );
+	} 
+
+	public static function toArray( $node ){
+		$map	= new ADT_List_Dictionary();
+		$map->set( 'og:url', $node->getUrl() );
+		if( $node->getTitle() )
+			$map->set( 'og:title', $node->getTitle() );
+		if( $node->getDescription() )
+			$map->set( 'og:description', $node->getDescription() );
+		if( $node->getType() )
+			$map->set( 'og:type', $node->getType() );
+		foreach( $node->getAudios() as $audio )
+			foreach( $audio->toArray() as $property => $content )
+				$map->set( $property, $content );
+		foreach( $node->getImages() as $image )
+			foreach( $image->toArray() as $property => $content )
+				$map->set( $property, $content );
+		foreach( $node->getVideos() as $video )
+			foreach( $video->toArray() as $property => $content )
+				$map->set( $property, $content );
+		return $map;
+	}
+
+	public static function toString( $node, $linePrefix	= "\t\t", $lineSuffix = "\n" ){
+		foreach( self::toArray( $node ) as $property => $content )
+			$tags[]	= CMM_OGP_Generator::renderMetaTag( $property, $content );
+		return $linePrefix.join( $lineSuffix.$linePrefix, $tags ).$lineSuffix;
+	}
+}
 ?>
