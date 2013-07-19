@@ -13,11 +13,6 @@ $ogNode->setDescription( "This is a test site." );
 
 $map	= CMM_OGP_Generator::toArray( $ogNode );
 
-
-xmp( CMM_OGP_Generator::toString( CMM_OGP_Parser::toNode( CMM_OGP_Generator::toString( $ogNode ) ) ) );
-print_m( $ogNode == CMM_OGP_Parser::toNode( CMM_OGP_Generator::toString( $ogNode ) ) );
-die;
-
 foreach( $map as $property => $content )
 	$page->addMetaTag( 'property', $property, $content );
 
@@ -57,6 +52,9 @@ foreach( CMM_OGP_Generator::toArray( $ogNode ) as $property => $content )
 print( $page->build() );</xmp>
     <h4>HTML result</h4>
     <xmp class="html">'.$page->build().'</xmp>
+	<h3>Parsing</h3>
+	<p>Having the complete HTML code of a site, you can parse marked OpenGraph data and get a node instance:</p>
+	<xmp class="php">$ogNode	= CMM_OGP_Parser::toNode( $html );</xmp>
 ';
 $page->addBody( $body );
 
