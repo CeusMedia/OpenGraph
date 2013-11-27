@@ -119,11 +119,11 @@ class CMM_OGP_Node{
 	}
 
 	public function setDescription( $description ){
-		$this->description	= $description;
+		$this->description	= htmlentities( $description, ENT_COMPAT, 'UTF-8' );
 	}
 
 	public function setTitle( $title ){
-		$this->title	= $title;
+		$this->title	= htmlentities( $title, ENT_COMPAT, 'UTF-8' );
 	}
 
 	public function setType( $type ){
@@ -131,7 +131,7 @@ class CMM_OGP_Node{
 	}
 
 	public function setUrl( $url ){
-		$this->url	= $url;
+		$this->url	= addslashes( $url );
 	}
 }
 ?>
