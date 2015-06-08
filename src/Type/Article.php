@@ -2,73 +2,82 @@
 namespace CeusMedia\OpenGraph\Type;
 class Article{
 
-	protected $url;
-	protected $firstName;
-	protected $lastName;
-	protected $username;
-	protected $gender;
+	protected $publishedTime;
+	protected $modifiedTime;
+	protected $expirationTime;
+	protected $author;
+	protected $section;
+	protected $tag;
 
-	protected $genders	= array( 'male', 'female' );
-
-	public function __construct(){}
-
-	public function getFirstName(){
-		return $this->firstName;
+	public function getPublishedTime(){
+		return date( 'r', $this->publishedTime );
 	}
 
-	public function getGender(){
-		return $this->gender;
+	public function getModifiedTime(){
+		return date( 'r', $this->modifiedTime );
 	}
 
-	public function getLastName(){
-		return $this->lastName;
+	public function getExpirationTime(){
+		return date( 'r', $this->expirationTime );
 	}
 
-	public function getUrl(){
-		return $this->url;
+	public function getAuthor(){
+		return $this->author;
 	}
 
-	public function getUsername(){
-		return $this->username;
+	public function getSection(){
+		return $this->section;
 	}
 
-	public function setFirstName( $firstName ){
-		$this->firstName	= $firstName;
+	public function getTag(){
+		return $this->tag;
 	}
 
-	public function setGender( $gender ){
-		if( !in_array( $gender, $this->genders ) )
-			throw new \OutOfRangeException( 'Invalid gender' );
-		return $this->gender;
+	public function setPublishedTime( $publishedTime ){
+		if( !strtotime( $publishedTime ) )
+			throw new \InvalidArgumentException( 'Invalid published time' );
+		$this->publishedTime	= strtotime( $publishedTime );
 	}
 
-	public function setLastName( $lastName ){
-		$this->lastName	= $lastName;
+	public function setModifiedTime( $modifiedTime ){
+		if( !strtotime( $modifiedTime ) )
+			throw new \InvalidArgumentException( 'Invalid modified time' );
+		$this->modifiedTime	= strtotime( $modifiedTime );
 	}
 
-	public function setUsername( $username ){
-		$this->username	= $username;
+	public function setExpirationTime( $expirationTime ){
+		if( !strtotime( $expirationTime ) )
+			throw new \InvalidArgumentException( 'Invalid expiration time' );
+		$this->expirationTime	= strtotime( $expirationTime );
 	}
 
-	public function setUrl( $url ){
-		if( !strlen( trim( $url ) ) )
-			throw new \InvalidArgumentException( 'Missing image URL' );
-		$this->url	= $url;
+	public function setAuthor( $author ){
+		$this->author	= $author;
+	}
+
+	public function setSection( $section ){
+		$this->section	= $section;
+	}
+
+	public function setTag( $tag ){
+		$this->tag	= $tag;
 	}
 
 	public function toArray(){
-		$prefix	= 'profile';
+		$prefix	= 'article';
 		$map	= new \ADT_List_Dictionary();
- 		if( $this->url )
-			$map->set( $prefix, $this->url );
-		if( $this->firstName )
-			$map->set( $prefix.':first_name', $this->firstName );
-		if( $this->lastName )
-			$map->set( $prefix.':last_name', $this->lastName );
-		if( $this->username )
-			$map->set( $prefix.':username', $this->username );
-		if( $this->gender )
-			$map->set( $prefix.':gender', $this->gender );
+		if( $this->publishedTime )
+			$map->set( $prefix.':published_time', $this->getPublishedTime() );
+		if( $this->modifiedTime )
+			$map->set( $prefix.':modified_time', $this->getModifiedTime() );
+		if( $this->expirationTime )
+			$map->set( $prefix.':expiration_time', $this->getExpirationTime() );
+		if( $this->author )
+			$map->set( $prefix.':author', $this->author );
+		if( $this->section )
+			$map->set( $prefix.':section', $this->section );
+		if( $this->tag )
+			$map->set( $prefix.':tag', $this->tag );
 		return $map;
 	}
 }

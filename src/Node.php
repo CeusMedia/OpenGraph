@@ -2,7 +2,7 @@
 /**
  *	Generator for OpenGraph markup.
  *
- *	Copyright (c) 2013 Christian Würker / {@link http://ceusmedia.de/ Ceus Media}
+ *	Copyright (c) 2013-2015 Christian Würker / {@link http://ceusmedia.de/ Ceus Media}
  *
  *	This program is free software: you can redistribute it and/or modify
  *	it under the terms of the GNU General Public License as published by
@@ -17,32 +17,33 @@
  *	You should have received a copy of the GNU General Public License
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- *	@category		cmModules
- *	@package		OGP
+ *	@category		Library
+ *	@package		CeusMedia_OpenGraph
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@copyright		2013 {@link http://ceusmedia.de/ Ceus Media}
+ *	@copyright		2013-2015 {@link http://ceusmedia.de/ Ceus Media}
  *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
- *	@link			http://code.google.com/p/cmmodules/
- *	@since			0.3.0
- *	@version		$Id$
+ *	@link			https://github.com/CeusMedia/OpenGraph
  */
+namespace CeusMedia\OpenGraph;
 /**
  *	Generator for OpenGraph markup.
- *	@category		cmModules
- *	@package		OGP
+ *	@category		Library
+ *	@package		CeusMedia_OpenGraph
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@copyright		2013 {@link http://ceusmedia.de/ Ceus Media}
+ *	@copyright		2013-2015 {@link http://ceusmedia.de/ Ceus Media}
  *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
- *	@link			http://code.google.com/p/cmmodules/
- *	@since			0.3.0
- *	@version		$Id$
+ *	@link			https://github.com/CeusMedia/OpenGraph
  */
-class CMM_OGP_Node{
+class Node{
 
 	protected $audios	= array();
 	protected $images	= array();
 	protected $videos	= array();
 	protected $url		= array();
+	protected $profile;
+	protected $article;
+	protected $book;
+	protected $properties	= array();
 
 	protected $title;
 	protected $type;
@@ -51,7 +52,26 @@ class CMM_OGP_Node{
 	protected $siteName;
 	protected $locale;
 	protected $localeAlternates	= array();
-	
+
+	protected $prefixes	= array(
+		'og'	=> "http://ogp.me/ns#"
+	);
+
+	protected $types	= array(
+		'music.song',
+		'music.album',
+		'music.playlist',
+		'music.radio_station',
+		'video.movie',
+		'video.episode',
+		'video.tv_show',
+		'video.other',
+		'article',
+		'book',
+		'profile',
+		'website'
+	);
+
 	public function __construct( $url, $title = NULL, $type = NULL ){
 		$this->setUrl( $url );
 		if( $title !== NULL )
@@ -60,38 +80,49 @@ class CMM_OGP_Node{
 			$this->setType( $type );
 	}
 
-	public function add( CMM_OGP_Abstract $structure ){
+	public function addStructure( $structure ){
 		$class	= get_class( $structure );
 		switch( $class ){
-			case 'CMM_OGP_Audio':
+			case '\CeusMedia\OpenGraph\Structure\Audio':
 				$this->addAudio( $structure );
 				break;
-			case 'CMM_OGP_Image':
+			case '\CeusMedia\OpenGraph\Structure\Image':
 				$this->addImage( $structure );
 				break;
-			case 'CMM_OGP_Video':
+			case '\CeusMedia\OpenGraph\Structure\Video':
 				$this->addVideo( $structure );
 				break;
 			default:
-				throw new InvalidArgumentException( 'Unsupported structure "'.$class.'"' );
+				throw new \InvalidArgumentException( 'Unsupported structure "'.$class.'"' );
 		}
 	}
 
-	
-	public function addAudio(CMM_OGP_Audio $audio ){
+	public function addAudio( \CeusMedia\OpenGraph\Structure\Audio $audio ){
 		$this->audios[]	= $audio;
 	}
-	
-	public function addImage( CMM_OGP_Image $image ){
+
+	public function addImage( \CeusMedia\OpenGraph\Structure\Image $image ){
 		$this->images[]	= $image;
 	}
 
-	public function addVideo( CMM_OGP_Video $video ){
+	public function addVideo( \CeusMedia\OpenGraph\Structure\Video $video ){
 		$this->videos[]	= $video;
 	}
 
 	public function getAudios(){
 		return $this->audios;
+	}
+
+	public function getArticle(){
+		return $this->article;
+	}
+
+	public function getBook(){
+		return $this->book;
+	}
+
+	public function getCustomProperties(){
+		return $this->properties;
 	}
 
 	public function getDescription(){
@@ -100,6 +131,14 @@ class CMM_OGP_Node{
 
 	public function getImages(){
 		return $this->images;
+	}
+
+	public function getPrefixes(){
+		return $this->prefixes;
+	}
+
+	public function getProfile(){
+		return $this->profile;
 	}
 
 	public function getTitle(){
@@ -118,6 +157,27 @@ class CMM_OGP_Node{
 		return $this->url;
 	}
 
+	public function addCustomProperty( $property, $value ){
+		if( !isset( $this->properties[$property] ) )
+			$this->properties[$property]	= array();
+		$this->properties[$property][]	= $value;
+	}
+
+	public function setArticle( \CeusMedia\OpenGraph\Type\Article $article ){
+		$this->article	= $article;
+		$this->prefixes['article']	= "http://ogp.me/ns/article#";
+	}
+
+	public function setBook( \CeusMedia\OpenGraph\Type\Book $book ){
+		$this->book	= $book;
+		$this->prefixes['book']	= "http://ogp.me/ns/book#";
+	}
+
+	public function setProfile( \CeusMedia\OpenGraph\Type\Profile $profile ){
+		$this->profile	= $profile;
+		$this->prefixes['profile']	= "http://ogp.me/ns/profile#";
+	}
+
 	public function setDescription( $description ){
 		$this->description	= htmlentities( $description, ENT_COMPAT, 'UTF-8' );
 	}
@@ -127,6 +187,8 @@ class CMM_OGP_Node{
 	}
 
 	public function setType( $type ){
+		if( !in_array( $type, $this->types ) )
+			throw new \OutOfRangeException( 'Type no supported' );
 		$this->type		= $type;
 	}
 

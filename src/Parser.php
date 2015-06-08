@@ -2,7 +2,7 @@
 /**
  *	Parser for OpenGraph markup.
  *
- *	Copyright (c) 2013 Christian Würker / {@link http://ceusmedia.de/ Ceus Media}
+ *	Copyright (c) 2013-2015 Christian Würker / {@link http://ceusmedia.de/ Ceus Media}
  *
  *	This program is free software: you can redistribute it and/or modify
  *	it under the terms of the GNU General Public License as published by
@@ -17,32 +17,29 @@
  *	You should have received a copy of the GNU General Public License
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- *	@category		cmModules
- *	@package		OGP
+ *	@category		Library
+ *	@package		CeusMedia_OpenGraph
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@copyright		2013 {@link http://ceusmedia.de/ Ceus Media}
+ *	@copyright		2013-2015 {@link http://ceusmedia.de/ Ceus Media}
  *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
- *	@link			http://code.google.com/p/cmmodules/
- *	@since			0.3.0
- *	@version		$Id$
+ *	@link			https://github.com/CeusMedia/OpenGraph
  */
+namespace CeusMedia\OpenGraph;
 /**
  *	Parser for OpenGraph markup.
- *	@category		cmModules
- *	@package		OGP
+ *	@category		Library
+ *	@package		CeusMedia_OpenGraph
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@copyright		2013 {@link http://ceusmedia.de/ Ceus Media}
+ *	@copyright		2013-2015 {@link http://ceusmedia.de/ Ceus Media}
  *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
- *	@link			http://code.google.com/p/cmmodules/
- *	@since			0.3.0
- *	@version		$Id$
+ *	@link			https://github.com/CeusMedia/OpenGraph
  */
-class CMM_OGP_Parser{
+class Parser{
 
 	public static function toNode( $html ){
 		$html	= preg_replace( "/^.*<head>/is", "", $html );
 		$html	= preg_replace( "/<\/head>.*$/is", "", $html );
-		$xml	= new XML_Element( '<metas>'.$html.'</metas>' );
+		$xml	= new \XML_Element( '<metas>'.$html.'</metas>' );
 		$node	= NULL;
 		$audios	= array();
 		$images	= array();
@@ -53,7 +50,7 @@ class CMM_OGP_Parser{
 				$content	= $metaTag->getAttribute( 'content' );
 				if( substr( $property, 0, 3 ) == "og:" ){
 					if( !$node && $property == "og:url" )
-						$node	= new CMM_OGP_Node( $content );
+						$node	= new \CeusMedia\OpenGraph\Node( $content );
 					else{
 						switch( $property ){
 							case 'og:type';
@@ -66,7 +63,7 @@ class CMM_OGP_Parser{
 								$node->setDescription( $content );
 								break;
 							case 'og:audio';
-								$audios[]	= new CMM_OGP_Image( $content );
+								$audios[]	= new \CeusMedia\OpenGraph\Structure\Audio( $content );
 								break;
 							case 'og:audio:type';
 								$audio	= array_pop( $audios );
@@ -79,7 +76,7 @@ class CMM_OGP_Parser{
 								array_push( $audios, $audio );
 								break;
 							case 'og:image';
-								$images[]	= new CMM_OGP_Image( $content );
+								$images[]	= new \CeusMedia\OpenGraph\Structure\Image( $content );
 								break;
 							case 'og:image:width';
 								$image	= array_pop( $images );
@@ -102,7 +99,7 @@ class CMM_OGP_Parser{
 								array_push( $images, $image );
 								break;
 							case 'og:video';
-								$videos[]	= new CMM_OGP_Video( $content );
+								$videos[]	= new \CeusMedia\OpenGraph\Structure\Video( $content );
 								break;
 							case 'og:video:width';
 								$video	= array_pop( $videos );
@@ -139,6 +136,6 @@ class CMM_OGP_Parser{
 		}
 		return $node;
 	}
-	
+
 }
 ?>
