@@ -2,7 +2,7 @@
 /**
  *	Generator for OpenGraph markup.
  *
- *	Copyright (c) 2013 Christian Würker / {@link http://ceusmedia.de/ Ceus Media}
+ *	Copyright (c) 2013-2015 Christian Würker / {@link http://ceusmedia.de/ Ceus Media}
  *
  *	This program is free software: you can redistribute it and/or modify
  *	it under the terms of the GNU General Public License as published by
@@ -17,34 +17,34 @@
  *	You should have received a copy of the GNU General Public License
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- *	@category		cmModules
- *	@package		OGP
+ *	@category		Library
+ *	@package		CeusMedia_OpenGraph_Structure
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@copyright		2013 {@link http://ceusmedia.de/ Ceus Media}
+ *	@copyright		2013-2015 {@link http://ceusmedia.de/ Ceus Media}
  *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
- *	@link			http://code.google.com/p/cmmodules/
- *	@since			0.3.0
- *	@version		$Id$
+ *	@link			https://github.com/CeusMedia/OpenGraph
  */
+namespace CeusMedia\OpenGraph\Structure;
 /**
  *	Generator for OpenGraph markup.
- *	@category		cmModules
- *	@package		OGP
+ *	@category		Library
+ *	@package		CeusMedia_OpenGraph_Structure
  *	@author			Christian Würker <christian.wuerker@ceusmedia.de>
- *	@copyright		2013 {@link http://ceusmedia.de/ Ceus Media}
+ *	@copyright		2013-2015 {@link http://ceusmedia.de/ Ceus Media}
  *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
- *	@link			http://code.google.com/p/cmmodules/
- *	@since			0.3.0
- *	@version		$Id$
+ *	@link			https://github.com/CeusMedia/OpenGraph
  */
-class CMM_OGP_Video extends CMM_OGP_Abstract{
+class Video{
 
 	protected $width;
 	protected $height;
 	protected $url;
 	protected $urlSecure;
 	protected $type;
-	public $indent	= "\t\t";
+
+	protected $types	= array(
+
+	);
 
 	public function __construct( $url, $width = NULL, $height = NULL, $mimeType = NULL ){
 		$this->setUrl( $url );
@@ -55,7 +55,7 @@ class CMM_OGP_Video extends CMM_OGP_Abstract{
 		if( $mimeType !== NULL )
 			$this->setType( $mimeType );
 	}
-	
+
 	public function getHeight(){
 		return $this->height;
 	}
@@ -77,10 +77,14 @@ class CMM_OGP_Video extends CMM_OGP_Abstract{
 	}
 
 	public function setHeight( $height ){
+		if( (int) $height <= 0 )
+			throw new \InvalidArgumentException( 'Image height must be greater than 0' );
 		$this->height	= $height;
 	}
 
 	public function setSecureUrl( $url ){
+		if( !strlen( trim( $url ) ) )
+			throw new \InvalidArgumentException( 'Missing secure video URL' );
 		$this->urlSecure	= $url;
 	}
 
@@ -89,16 +93,20 @@ class CMM_OGP_Video extends CMM_OGP_Abstract{
 	}
 
 	public function setUrl( $url ){
+		if( !strlen( trim( $url ) ) )
+			throw new \InvalidArgumentException( 'Missing image URL' );
 		$this->url	= $url;
 	}
 
 	public function setWidth( $width ){
-		$this->width	= $width;
+		if( (int) $width <= 0 )
+			throw new \InvalidArgumentException( 'Image width must be greater than 0' );
+		$this->width	= (int) $width;
 	}
 
 	public function toArray(){
 		$prefix	= 'og:video';
-		$map	= new ADT_List_Dictionary( array( $prefix => $this->url ) );
+		$map	= new \ADT_List_Dictionary( array( $prefix => $this->url ) );
 		if( $this->urlSecure )
 			$map->set( $prefix.':secure_url', $this->urlSecure );
 		if( $this->type )
