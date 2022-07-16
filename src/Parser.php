@@ -39,7 +39,8 @@ namespace CeusMedia\OpenGraph;
  */
 class Parser{
 
-	public static function toNode( $html ){
+	public static function toNode( string $html ): Node
+	{
 		$html	= preg_replace( "/^.*<head>/is", "", $html );
 		$html	= preg_replace( "/<\/head>.*$/is", "", $html );
 		$xml	= new \XML_Element( '<metas>'.$html.'</metas>' );
@@ -129,7 +130,7 @@ class Parser{
 				}
 			}
 		}
-		if( $node ){
+		if( !is_null( $node ) ){
 			foreach( $audios as $audio )
 				$node->add( $audio );
 			foreach( $images as $image )

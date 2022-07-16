@@ -48,7 +48,8 @@ class Video{
 
 	);
 
-	public function __construct( $url, $width = NULL, $height = NULL, $mimeType = NULL ){
+	public function __construct( string $url, ?int $width = NULL, ?int $height = NULL, ?string $mimeType = NULL )
+	{
 		$this->setUrl( $url );
 		if( $width !== NULL )
 			$this->setWidth( $width );
@@ -58,55 +59,71 @@ class Video{
 			$this->setType( $mimeType );
 	}
 
-	public function getHeight(){
+	public function getHeight(): ?int
+	{
 		return $this->height;
 	}
 
-	public function getSecureUrl(){
+	public function getSecureUrl(): ?string
+	{
 		return $this->urlSecure;
 	}
 
-	public function getType(){
+	public function getType(): ?string
+	{
 		return $this->type;
 	}
 
-	public function getUrl(){
+	public function getUrl(): string
+	{
 		return $this->url;
 	}
 
-	public function getWidth(){
+	public function getWidth(): ?int
+	{
 		return $this->width;
 	}
 
-	public function setHeight( $height ){
-		if( (int) $height <= 0 )
-			throw new \InvalidArgumentException( 'Image height must be greater than 0' );
+	public function setHeight( int $height ): self
+	{
+		if( $height <= 0 )
+			throw new InvalidArgumentException( 'Image height must be greater than 0' );
 		$this->height	= $height;
+		return $this;
 	}
 
-	public function setSecureUrl( $url ){
-		if( !strlen( trim( $url ) ) )
-			throw new \InvalidArgumentException( 'Missing secure video URL' );
+	public function setSecureUrl( string $url ): self
+	{
+		if( strlen( trim( $url ) ) === 0 )
+			throw new InvalidArgumentException( 'Missing secure video URL' );
 		$this->urlSecure	= $url;
+		return $this;
 	}
 
-	public function setType( $mimeType ){
+	public function setType( string $mimeType ): self
+	{
 		$this->type	= $mimeType;
+		return $this;
 	}
 
-	public function setUrl( $url ){
-		if( !strlen( trim( $url ) ) )
-			throw new \InvalidArgumentException( 'Missing image URL' );
+	public function setUrl( string $url ): self
+	{
+		if( strlen( trim( $url ) ) === 0 )
+			throw new InvalidArgumentException( 'Missing image URL' );
 		$this->url	= $url;
+		return $this;
 	}
 
-	public function setWidth( $width ){
-		if( (int) $width <= 0 )
-			throw new \InvalidArgumentException( 'Image width must be greater than 0' );
-		$this->width	= (int) $width;
+	public function setWidth( int $width ): self
+	{
+		if( $width <= 0 )
+			throw new InvalidArgumentException( 'Image width must be greater than 0' );
+		$this->width	= $width;
+		return $this;
 	}
 
-	public function toArray(){
+	public function toArray(): array
+	{
 		$prefix	= 'og:video';
 		$map	= new \ADT_List_Dictionary( array( $prefix => $this->url ) );
 		if( $this->urlSecure )

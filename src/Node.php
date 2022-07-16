@@ -74,7 +74,8 @@ class Node{
 		'website'
 	);
 
-	public function __construct( $url, $title = NULL, $type = NULL ){
+	public function __construct( string $url, ?string $title = NULL, ?string $type = NULL )
+	{
 		$this->setUrl( $url );
 		if( $title !== NULL )
 			$this->setTitle( $title );
@@ -82,7 +83,8 @@ class Node{
 			$this->setType( $type );
 	}
 
-	public function addStructure( $structure ){
+	public function addStructure( $structure ): self
+	{
 		$class	= get_class( $structure );
 		switch( $class ){
 			case '\CeusMedia\OpenGraph\Structure\Audio':
@@ -97,25 +99,34 @@ class Node{
 			default:
 				throw new \InvalidArgumentException( 'Unsupported structure "'.$class.'"' );
 		}
+		return $this;
 	}
 
-	public function addAudio( \CeusMedia\OpenGraph\Structure\Audio $audio ){
+	public function addAudio( Structure\Audio $audio ): self
+	{
 		$this->audios[]	= $audio;
+		return $this;
 	}
 
-	public function addImage( \CeusMedia\OpenGraph\Structure\Image $image ){
+	public function addImage( Structure\Image $image ): self
+	{
 		$this->images[]	= $image;
+		return $this;
 	}
 
-	public function addVideo( \CeusMedia\OpenGraph\Structure\Video $video ){
+	public function addVideo( Structure\Video $video ): self
+	{
 		$this->videos[]	= $video;
+		return $this;
 	}
 
-	public function getAudios(){
+	public function getAudios()
+	{
 		return $this->audios;
 	}
 
-	public function getArticle(){
+	public function getArticle()
+	{
 		return $this->article;
 	}
 
@@ -165,17 +176,18 @@ class Node{
 		$this->properties[$property][]	= $value;
 	}
 
-	public function setArticle( \CeusMedia\OpenGraph\Type\Article $article ){
+	public function setArticle( Type\Article $article ): self
+	{
 		$this->article	= $article;
 		$this->prefixes['article']	= "http://ogp.me/ns/article#";
 	}
 
-	public function setBook( \CeusMedia\OpenGraph\Type\Book $book ){
+	public function setBook( Type\Book $book ){
 		$this->book	= $book;
 		$this->prefixes['book']	= "http://ogp.me/ns/book#";
 	}
 
-	public function setProfile( \CeusMedia\OpenGraph\Type\Profile $profile ){
+	public function setProfile( Type\Profile $profile ){
 		$this->profile	= $profile;
 		$this->prefixes['profile']	= "http://ogp.me/ns/profile#";
 	}

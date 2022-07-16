@@ -42,37 +42,48 @@ class Audio{
 	protected $urlSecure;
 	protected $type;
 
-	public function __construct( $url, $mimeType = NULL ){
+	public function __construct( $url, ?string $mimeType = NULL )
+	{
 		$this->setUrl( $url );
 		if( $mimeType !== NULL )
 			$this->setType( $mimeType );
 	}
 
-	public function getSecureUrl(){
+	public function getSecureUrl(): ?string
+	{
 		return $this->urlSecure;
 	}
 
-	public function getType(){
+	public function getType(): ?string
+	{
 		return $this->type;
 	}
 
-	public function getUrl(){
+	public function getUrl(): string
+	{
 		return $this->url;
 	}
 
-	public function setSecureUrl( $url ){
+	public function setSecureUrl( string $url ): self
+	{
 		$this->urlSecure	= $url;
+		return $this;
 	}
 
-	public function setType( $mimeType ){
+	public function setType( $mimeType ): self
+	{
 		$this->type	= $mimeType;
+		return $this;
 	}
 
-	public function setUrl( $url ){
+	public function setUrl( $url ): self
+	{
 		$this->url	= $url;
+		return $this;
 	}
 
-	public function toArray(){
+	public function toArray(): array
+	{
 		$prefix	= 'og:audio';
 		$map	= new \ADT_List_Dictionary( array( $prefix => $this->url ) );
 		if( $this->urlSecure )

@@ -41,25 +41,9 @@ class Renderer{
 	public static $linePrefix	= "    ";
 	public static $lineSuffix	= "\n";
 
-	protected static function enlist( &$list, $property, $content ){
-		if( !strlen( trim( $content ) ) )
-			return;
-		$list[]	= \UI_HTML_Tag::create( 'meta', NULL, array(
-			'property'	=> $property,
-			'content'	=> addslashes( $content )
-		) );
-	}
-
-	public static function renderPrefixes( \CeusMedia\OpenGraph\Node $node ){
-		$list	= array();
-		foreach( $node->getPrefixes() as $ns => $url ){
-			$list[]	= $ns.": ".$url;
-		}
-		return join( " ", $list );
-	}
-
-	public static function render( \CeusMedia\OpenGraph\Node $node, $withComments = TRUE ){
-		$list	= array();
+	public static function render( Node $node, bool $withComments = TRUE ): string
+	{
+		$list	= [];
 		if( $withComments )
 			$list[]	= "<!-- OpenGraph Start -->";
 		self::enlist( $list, 'og:url', $node->getUrl() );
@@ -89,9 +73,27 @@ class Renderer{
 				foreach( $contents as $content )
 					self::enlist( $list, $property, $content );
 		if( $withComments )
-			$list[]	= "<!-- OpenGraph End -->";
+			$list[]	= '<!-- OpenGraph End -->';
 		$list	= join( self::$lineSuffix . self::$linePrefix, $list );
 		return self::$linePrefix . $list . self::$lineSuffix;
+	}
+
+	public static function renderPrefixes( Node $node ): string
+	{
+		$list	= [];
+		foreach( $node->getPrefixes() as $ns => $url )
+			$list[]	= $ns.': '.$url;
+		return join( ' ', $list );
+	}
+
+	protected static function enlist( &$list, string $property, string $content ): void
+	{
+		if( strlen( trim( $content ) ) === 0 )
+			return;
+		$list[]	= \UI_HTML_Tag::create( 'meta', NULL, array(
+			'property'	=> $property,
+			'content'	=> addslashes( $content )
+		) );
 	}
 }
 ?>
