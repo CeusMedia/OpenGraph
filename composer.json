@@ -1,6 +1,5 @@
 {
   "name": "ceus-media/open-graph",
-  "version": "0.2",
   "license": [
     "GPL-3.0+"
   ],
@@ -8,24 +7,25 @@
     {
       "name": "Christian Würker",
       "email": "christian.wuerker@ceusmedia.de",
-      "homepage": "http://ceusmedia.de",
+      "homepage": "https://ceusmedia.de/",
       "role": "Developer"
     }
   ],
   "support": {
     "email": "office@ceusmedia.de",
-    "jabber": "ceus-media@jabber.org"
+    "jabber": "cwuerker@ceusmedia.de"
   },
   "require": {
-    "ceus-media/common": "^0.8"
-  },
-  "require-dev": {
-    "ceus-media/common": "dev-master"
     "php": "^7.3 || ^8",
+    "ceus-media/common": "^0.8 || ^0.9 || dev-master"
   },
   "autoload": {
     "psr-4": {
         "CeusMedia\\OpenGraph\\": ["src/"]
     }
+  },
+  "require-dev": {
+    "phpstan/phpstan": "*",
+    "phpstan/phpstan-strict-rules": "*"
   }
 }

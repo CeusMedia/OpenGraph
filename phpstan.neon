@@ -1,0 +1,13 @@
+includes:
+	- vendor/phpstan/phpstan-strict-rules/rules.neon
+#	- phpstan-baseline.neon
+
+parameters:
+	phpVersion: 70300
+	level: 5
+	paths:
+		- src
+	checkMissingIterableValueType: false
+	checkGenericClassInNonGenericObjectType: false
+#	reportMaybesInPropertyPhpDocTypes: false
+#	treatPhpDocTypesAsCertain: false
