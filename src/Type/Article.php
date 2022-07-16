@@ -2,8 +2,9 @@
 declare(strict_types=1);
 
 namespace CeusMedia\OpenGraph\Type;
-class Article{
 
+class Article
+{
 	protected $publishedTime;
 	protected $modifiedTime;
 	protected $expirationTime;

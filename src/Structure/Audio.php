@@ -27,6 +27,9 @@ declare(strict_types=1);
  *	@link			https://github.com/CeusMedia/OpenGraph
  */
 namespace CeusMedia\OpenGraph\Structure;
+
+use ADT_List_Dictionary as Dictionary;
+
 /**
  *	Generator for OpenGraph markup.
  *	@category		Library
@@ -36,8 +39,8 @@ namespace CeusMedia\OpenGraph\Structure;
  *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
  *	@link			https://github.com/CeusMedia/OpenGraph
  */
-class Audio{
-
+class Audio
+{
 	protected $url;
 	protected $urlSecure;
 	protected $type;
@@ -85,7 +88,7 @@ class Audio{
 	public function toArray(): array
 	{
 		$prefix	= 'og:audio';
-		$map	= new \ADT_List_Dictionary( array( $prefix => $this->url ) );
+		$map	= new Dictionary( [$prefix => $this->url] );
 		if( $this->urlSecure )
 			$map->set( $prefix.':secure_url', $this->urlSecure );
 		if( $this->type )
@@ -93,4 +96,3 @@ class Audio{
 		return $map->getAll();
 	}
 }
-?>

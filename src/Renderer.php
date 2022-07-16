@@ -27,6 +27,7 @@ declare(strict_types=1);
  *	@link			https://github.com/CeusMedia/OpenGraph
  */
 namespace CeusMedia\OpenGraph;
+
 /**
  *	Renderer for OpenGraph markup.
  *	@category		Library
@@ -36,8 +37,8 @@ namespace CeusMedia\OpenGraph;
  *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
  *	@link			https://github.com/CeusMedia/OpenGraph
  */
-class Renderer{
-
+class Renderer
+{
 	public static $linePrefix	= "    ";
 	public static $lineSuffix	= "\n";
 
@@ -96,4 +97,3 @@ class Renderer{
 		) );
 	}
 }
-?>

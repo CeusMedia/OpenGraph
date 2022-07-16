@@ -2,8 +2,9 @@
 declare(strict_types=1);
 
 namespace CeusMedia\OpenGraph\Type;
-class Profile{
 
+class Profile
+{
 	protected $url;
 	protected $firstName;
 	protected $lastName;

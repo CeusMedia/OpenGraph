@@ -45,7 +45,7 @@ catch(Exception $e){
 
 $page	= new UI_HTML_PageFrame();
 $page->addHead("\n".$html);
-$html	= $page->build( array(), array(
+$html	= $page->build( [], array(
 	'prefix' => \CeusMedia\OpenGraph\Renderer::renderPrefixes($node)
 ));
 

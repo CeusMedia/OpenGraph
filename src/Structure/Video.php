@@ -27,6 +27,10 @@ declare(strict_types=1);
  *	@link			https://github.com/CeusMedia/OpenGraph
  */
 namespace CeusMedia\OpenGraph\Structure;
+
+use ADT_List_Dictionary as Dictionary;
+use InvalidArgumentException;
+
 /**
  *	Generator for OpenGraph markup.
  *	@category		Library
@@ -36,17 +40,15 @@ namespace CeusMedia\OpenGraph\Structure;
  *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
  *	@link			https://github.com/CeusMedia/OpenGraph
  */
-class Video{
-
+class Video
+{
 	protected $width;
 	protected $height;
 	protected $url;
 	protected $urlSecure;
 	protected $type;
 
-	protected $types	= array(
-
-	);
+	protected $types	= [];
 
 	public function __construct( string $url, ?int $width = NULL, ?int $height = NULL, ?string $mimeType = NULL )
 	{
@@ -125,7 +127,7 @@ class Video{
 	public function toArray(): array
 	{
 		$prefix	= 'og:video';
-		$map	= new \ADT_List_Dictionary( array( $prefix => $this->url ) );
+		$map	= new Dictionary( array( $prefix => $this->url ) );
 		if( $this->urlSecure )
 			$map->set( $prefix.':secure_url', $this->urlSecure );
 		if( $this->type )
@@ -137,4 +139,3 @@ class Video{
 		return $map->getAll();
 	}
 }
-?>

@@ -27,6 +27,10 @@ declare(strict_types=1);
  *	@link			https://github.com/CeusMedia/OpenGraph
  */
 namespace CeusMedia\OpenGraph\Structure;
+
+use ADT_List_Dictionary as Dictionary;
+use InvalidArgumentException;
+
 /**
  *	Generator for OpenGraph markup.
  *	@category		Library
@@ -36,8 +40,8 @@ namespace CeusMedia\OpenGraph\Structure;
  *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
  *	@link			https://github.com/CeusMedia/OpenGraph
  */
-class Image{
-
+class Image
+{
 	protected $width;
 	protected $height;
 	protected $url;
@@ -121,7 +125,7 @@ class Image{
 	public function toArray(): array
 	{
 		$prefix	= 'og:image';
-		$map	= new \ADT_List_Dictionary( array( $prefix => $this->url ) );
+		$map	= new Dictionary( array( $prefix => $this->url ) );
 		if( $this->urlSecure )
 			$map->set( $prefix.':secure_url', $this->urlSecure );
 		if( $this->type )
@@ -133,4 +137,3 @@ class Image{
 		return $map->getAll();
 	}
 }
-?>

@@ -27,6 +27,9 @@ declare(strict_types=1);
  *	@link			https://github.com/CeusMedia/OpenGraph
  */
 namespace CeusMedia\OpenGraph;
+
+use InvalidArgumentException;
+
 /**
  *	Generator for OpenGraph markup.
  *	@category		Library
@@ -36,16 +39,16 @@ namespace CeusMedia\OpenGraph;
  *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
  *	@link			https://github.com/CeusMedia/OpenGraph
  */
-class Node{
-
-	protected $audios	= array();
-	protected $images	= array();
-	protected $videos	= array();
-	protected $url		= array();
+class Node
+{
+	protected $audios	= [];
+	protected $images	= [];
+	protected $videos	= [];
+	protected $url		= [];
 	protected $profile;
 	protected $article;
 	protected $book;
-	protected $properties	= array();
+	protected $properties	= [];
 
 	protected $title;
 	protected $type;
@@ -53,10 +56,10 @@ class Node{
 	protected $determiner;
 	protected $siteName;
 	protected $locale;
-	protected $localeAlternates	= array();
+	protected $localeAlternates	= [];
 
 	protected $prefixes	= array(
-		'og'	=> "http://ogp.me/ns#"
+		'og'	=> 'http://ogp.me/ns#'
 	);
 
 	protected $types	= array(
@@ -87,17 +90,17 @@ class Node{
 	{
 		$class	= get_class( $structure );
 		switch( $class ){
-			case '\CeusMedia\OpenGraph\Structure\Audio':
+			case Structure\Audio::class:
 				$this->addAudio( $structure );
 				break;
-			case '\CeusMedia\OpenGraph\Structure\Image':
+			case Structure\Image::class:
 				$this->addImage( $structure );
 				break;
-			case '\CeusMedia\OpenGraph\Structure\Video':
+			case Structure\Video::class:
 				$this->addVideo( $structure );
 				break;
 			default:
-				throw new \InvalidArgumentException( 'Unsupported structure "'.$class.'"' );
+				throw new InvalidArgumentException( 'Unsupported structure "'.$class.'"' );
 		}
 		return $this;
 	}
@@ -172,24 +175,25 @@ class Node{
 
 	public function addCustomProperty( $property, $value ){
 		if( !isset( $this->properties[$property] ) )
-			$this->properties[$property]	= array();
+			$this->properties[$property]	= [];
 		$this->properties[$property][]	= $value;
 	}
 
 	public function setArticle( Type\Article $article ): self
 	{
 		$this->article	= $article;
-		$this->prefixes['article']	= "http://ogp.me/ns/article#";
+		$this->prefixes['article']	= 'http://ogp.me/ns/article#';
+		return $this;
 	}
 
 	public function setBook( Type\Book $book ){
 		$this->book	= $book;
-		$this->prefixes['book']	= "http://ogp.me/ns/book#";
+		$this->prefixes['book']	= 'http://ogp.me/ns/book#';
 	}
 
 	public function setProfile( Type\Profile $profile ){
 		$this->profile	= $profile;
-		$this->prefixes['profile']	= "http://ogp.me/ns/profile#";
+		$this->prefixes['profile']	= 'http://ogp.me/ns/profile#';
 	}
 
 	public function setDescription( $description ){
@@ -201,7 +205,7 @@ class Node{
 	}
 
 	public function setType( $type ){
-		if( !in_array( $type, $this->types ) )
+		if( !in_array( $type, $this->types, TRUE ) )
 			throw new \OutOfRangeException( 'Type no supported' );
 		$this->type		= $type;
 	}

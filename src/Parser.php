@@ -37,17 +37,17 @@ namespace CeusMedia\OpenGraph;
  *	@license		http://www.gnu.org/licenses/gpl-3.0.txt GPL 3
  *	@link			https://github.com/CeusMedia/OpenGraph
  */
-class Parser{
-
+class Parser
+{
 	public static function toNode( string $html ): Node
 	{
 		$html	= preg_replace( "/^.*<head>/is", "", $html );
 		$html	= preg_replace( "/<\/head>.*$/is", "", $html );
 		$xml	= new \XML_Element( '<metas>'.$html.'</metas>' );
 		$node	= NULL;
-		$audios	= array();
-		$images	= array();
-		$videos	= array();
+		$audios	= [];
+		$images	= [];
+		$videos	= [];
 		foreach( $xml->meta as $metaTag ){
 			if( $metaTag->hasAttribute( 'property' ) && $metaTag->hasAttribute( 'content' ) ){
 				$property	= $metaTag->getAttribute( 'property' );
@@ -140,6 +140,4 @@ class Parser{
 		}
 		return $node;
 	}
-
 }
-?>

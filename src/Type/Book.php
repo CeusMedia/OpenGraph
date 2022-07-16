@@ -2,8 +2,9 @@
 declare(strict_types=1);
 
 namespace CeusMedia\OpenGraph\Type;
-class Book{
 
+class Book
+{
 	protected $author;
 	protected $isbn;
 	protected $releaseDate;
