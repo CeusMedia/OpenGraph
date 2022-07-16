@@ -33,7 +33,7 @@ class Profile{
 	}
 
 	public function setGender( $gender ){
-		if( !in_array( $gender, $this->genders ) )
+		if( !in_array( $gender, $this->genders, TRUE ) )
 			throw new \OutOfRangeException( 'Invalid gender' );
 		return $this->gender;
 	}

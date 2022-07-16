@@ -90,7 +90,7 @@ class Audio{
 			$map->set( $prefix.':secure_url', $this->urlSecure );
 		if( $this->type )
 			$map->set( $prefix.':type', $this->type );
-		return $map;
+		return $map->getAll();
 	}
 }
 ?>

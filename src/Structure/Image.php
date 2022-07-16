@@ -130,7 +130,7 @@ class Image{
 			$map->set( $prefix.':width', $this->width );
 		if( $this->height )
 			$map->set( $prefix.':height', $this->height );
-		return $map;
+		return $map->getAll();
 	}
 }
 ?>
