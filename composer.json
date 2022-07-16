@@ -17,11 +17,11 @@
     "jabber": "ceus-media@jabber.org"
   },
   "require": {
-    "php": "^5.3 || ^7",
     "ceus-media/common": "^0.8"
   },
   "require-dev": {
     "ceus-media/common": "dev-master"
+    "php": "^7.3 || ^8",
   },
   "autoload": {
     "psr-4": {
