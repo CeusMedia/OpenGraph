@@ -70,6 +70,6 @@ $body = '
 </div>';
 
 $page	= new PageFrame();
-$page->addStylesheet("https://cdn.int1a.net/css/bootstrap.min.css");
+$page->addStylesheet("https://cdn.ceusmedia.de/css/bootstrap.min.css");
 $page->addBody($body);
 print $page->build();

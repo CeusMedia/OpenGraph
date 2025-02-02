@@ -6,7 +6,7 @@
 		<path>src/</path>
 		<extension>php</extension>
 		<ignore type="file">/^(_|[a-z])/</ignore>
-		<ignore type="folder"></ignore>
+		<ignore type="folder"/>
 		<category by="default">Library</category>
 		<package by="default">CeusMedia_OpenGraph</package>
 	</project>
@@ -68,7 +68,7 @@
 		<file name="errors">docCreatorErrors.log</file>
 		<skip parser="FALSE" creator="FALSE" info="FALSE" resources="FALSE"/>
 		<verbose general="TRUE" skip="TRUE" config="FALSE" info="TRUE" trace="FALSE"/>
-		<mail></mail>
+		<mail/>
 	</creator>
 
 </config>
