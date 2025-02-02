@@ -1,0 +1,37 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Method CeusMedia\\OpenGraph\\Structure\\Audio\:\:toArray\(\) should return array but returns array\|CeusMedia\\Common\\ADT\\Collection\\Dictionary\.$#'
+			identifier: return.type
+			count: 1
+			path: ../src/Structure/Audio.php
+
+		-
+			message: '#^Method CeusMedia\\OpenGraph\\Structure\\Image\:\:toArray\(\) should return array but returns array\|CeusMedia\\Common\\ADT\\Collection\\Dictionary\.$#'
+			identifier: return.type
+			count: 1
+			path: ../src/Structure/Image.php
+
+		-
+			message: '#^Method CeusMedia\\OpenGraph\\Structure\\Video\:\:toArray\(\) should return array but returns array\|CeusMedia\\Common\\ADT\\Collection\\Dictionary\.$#'
+			identifier: return.type
+			count: 1
+			path: ../src/Structure/Video.php
+
+		-
+			message: '#^Method CeusMedia\\OpenGraph\\Type\\Article\:\:toArray\(\) should return array but returns array\|CeusMedia\\Common\\ADT\\Collection\\Dictionary\.$#'
+			identifier: return.type
+			count: 1
+			path: ../src/Type/Article.php
+
+		-
+			message: '#^Method CeusMedia\\OpenGraph\\Type\\Book\:\:toArray\(\) should return array but returns array\|CeusMedia\\Common\\ADT\\Collection\\Dictionary\.$#'
+			identifier: return.type
+			count: 1
+			path: ../src/Type/Book.php
+
+		-
+			message: '#^Method CeusMedia\\OpenGraph\\Type\\Profile\:\:toArray\(\) should return array but returns array\|CeusMedia\\Common\\ADT\\Collection\\Dictionary\.$#'
+			identifier: return.type
+			count: 1
+			path: ../src/Type/Profile.php
