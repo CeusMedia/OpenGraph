@@ -133,6 +133,9 @@ class Node
 		return $this;
 	}
 
+	/**
+	 * @return array<AudioStructure>
+	 */
 	public function getAudios(): array
 	{
 		return $this->audios;
@@ -158,6 +161,9 @@ class Node
 		return $this->description;
 	}
 
+	/**
+	 * @return array<ImageStructure>
+	 */
 	public function getImages(): array
 	{
 		return $this->images;
@@ -183,6 +189,9 @@ class Node
 		return $this->type;
 	}
 
+	/**
+	 * @return array<VideoStructure>
+	 */
 	public function getVideos(): array
 	{
 		return $this->videos;

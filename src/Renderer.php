@@ -50,9 +50,12 @@ class Renderer
 		if( $withComments )
 			$list[]	= "<!-- OpenGraph Start -->";
 		self::enlist( $list, 'og:url', $node->getUrl() );
-		self::enlist( $list, 'og:title', $node->getTitle() );
-		self::enlist( $list, 'og:description', $node->getDescription() );
-		self::enlist( $list, 'og:type', $node->getType() );
+		if( NULL !== $node->getTitle() )
+			self::enlist( $list, 'og:title', $node->getTitle() );
+		if( NULL !== $node->getDescription() )
+			self::enlist( $list, 'og:description', $node->getDescription() );
+		if( NULL !== $node->getType() )
+			self::enlist( $list, 'og:type', $node->getType() );
 		foreach( $node->getAudios() as $audio )
 			foreach( $audio->toArray() as $property => $content )
 				self::enlist( $list, $property, $content );
@@ -88,13 +91,13 @@ class Renderer
 		return join( ' ', $list );
 	}
 
-	protected static function enlist( array &$list, string $property, string $content ): void
+	protected static function enlist( array &$list, string $property, int|float|string $content ): void
 	{
-		if( strlen( trim( $content ) ) === 0 )
+		if( '' === trim( (string) $content ) )
 			return;
 		$list[]	= HtmlTag::create( 'meta', NULL, array(
 			'property'	=> $property,
-			'content'	=> addslashes( $content )
+			'content'	=> addslashes( (string) $content )
 		) );
 	}
 }
