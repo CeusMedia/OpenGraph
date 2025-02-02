@@ -28,7 +28,14 @@ declare(strict_types=1);
  */
 namespace CeusMedia\OpenGraph;
 
+use CeusMedia\OpenGraph\Structure\Audio as AudioStructure;
+use CeusMedia\OpenGraph\Structure\Image as ImageStructure;
+use CeusMedia\OpenGraph\Structure\Video as VideoStructure;
+use CeusMedia\OpenGraph\Type\Article as ArticleType;
+use CeusMedia\OpenGraph\Type\Book as BookType;
+use CeusMedia\OpenGraph\Type\Profile as ProfileType;
 use InvalidArgumentException;
+use OutOfRangeException;
 
 /**
  *	Generator for OpenGraph markup.
@@ -41,28 +48,28 @@ use InvalidArgumentException;
  */
 class Node
 {
-	protected $audios	= [];
-	protected $images	= [];
-	protected $videos	= [];
-	protected $url		= [];
-	protected $profile;
-	protected $article;
-	protected $book;
-	protected $properties	= [];
+	protected array $audios			= [];
+	protected array $images			= [];
+	protected array $videos			= [];
+	protected string $url;
+	protected ?ProfileType $profile	= NULL;
+	protected ?ArticleType $article	= NULL;
+	protected ?BookType $book		= NULL;
+	protected array $properties		= [];
 
-	protected $title;
-	protected $type;
-	protected $description;
-	protected $determiner;
-	protected $siteName;
-	protected $locale;
-	protected $localeAlternates	= [];
+	protected ?string $title		= NULL;
+	protected ?string $type			= NULL;
+	protected ?string $description	= NULL;
+	protected ?string $determiner	= NULL;
+	protected ?string $siteName		= NULL;
+	protected ?string $locale		= NULL;
+	protected array $localeAlternates	= [];
 
-	protected $prefixes	= array(
-		'og'	=> 'http://ogp.me/ns#'
-	);
+	protected array $prefixes	= [
+		'og'	=> 'https://ogp.me/ns#'
+	];
 
-	protected $types	= array(
+	protected array $types	= [
 		'music.song',
 		'music.album',
 		'music.playlist',
@@ -75,28 +82,31 @@ class Node
 		'book',
 		'profile',
 		'website'
-	);
+	];
 
 	public function __construct( string $url, ?string $title = NULL, ?string $type = NULL )
 	{
 		$this->setUrl( $url );
-		if( $title !== NULL )
+		if( NULL !== $title )
 			$this->setTitle( $title );
-		if( $type !== NULL )
+		if( NULL !== $type )
 			$this->setType( $type );
 	}
 
-	public function addStructure( $structure ): self
+	public function addStructure( AudioStructure|ImageStructure|VideoStructure $structure ): static
 	{
 		$class	= get_class( $structure );
 		switch( $class ){
-			case Structure\Audio::class:
+			case AudioStructure::class:
+				/** @var AudioStructure $structure */
 				$this->addAudio( $structure );
 				break;
-			case Structure\Image::class:
+			case ImageStructure::class:
+				/** @var ImageStructure $structure */
 				$this->addImage( $structure );
 				break;
-			case Structure\Video::class:
+			case VideoStructure::class:
+				/** @var VideoStructure $structure */
 				$this->addVideo( $structure );
 				break;
 			default:
@@ -105,113 +115,135 @@ class Node
 		return $this;
 	}
 
-	public function addAudio( Structure\Audio $audio ): self
+	public function addAudio( AudioStructure $audio ): static
 	{
 		$this->audios[]	= $audio;
 		return $this;
 	}
 
-	public function addImage( Structure\Image $image ): self
+	public function addImage( ImageStructure $image ): static
 	{
 		$this->images[]	= $image;
 		return $this;
 	}
 
-	public function addVideo( Structure\Video $video ): self
+	public function addVideo( VideoStructure $video ): static
 	{
 		$this->videos[]	= $video;
 		return $this;
 	}
 
-	public function getAudios()
+	public function getAudios(): array
 	{
 		return $this->audios;
 	}
 
-	public function getArticle()
+	public function getArticle(): ?ArticleType
 	{
 		return $this->article;
 	}
 
-	public function getBook(){
+	public function getBook(): ?BookType
+	{
 		return $this->book;
 	}
 
-	public function getCustomProperties(){
+	public function getCustomProperties(): array
+	{
 		return $this->properties;
 	}
 
-	public function getDescription(){
+	public function getDescription(): ?string
+	{
 		return $this->description;
 	}
 
-	public function getImages(){
+	public function getImages(): array
+	{
 		return $this->images;
 	}
 
-	public function getPrefixes(){
+	public function getPrefixes(): array
+	{
 		return $this->prefixes;
 	}
 
-	public function getProfile(){
+	public function getProfile(): ?ProfileType
+	{
 		return $this->profile;
 	}
 
-	public function getTitle(){
+	public function getTitle(): ?string
+	{
 		return $this->title;
 	}
 
-	public function getType(){
+	public function getType(): ?string
+	{
 		return $this->type;
 	}
 
-	public function getVideos(){
+	public function getVideos(): array
+	{
 		return $this->videos;
 	}
 
-	public function getUrl(){
+	public function getUrl(): string
+	{
 		return $this->url;
 	}
 
-	public function addCustomProperty( $property, $value ){
+	public function addCustomProperty( string $property, string|int|float $value ): static
+	{
 		if( !isset( $this->properties[$property] ) )
 			$this->properties[$property]	= [];
 		$this->properties[$property][]	= $value;
-	}
-
-	public function setArticle( Type\Article $article ): self
-	{
-		$this->article	= $article;
-		$this->prefixes['article']	= 'http://ogp.me/ns/article#';
 		return $this;
 	}
 
-	public function setBook( Type\Book $book ){
+	public function setArticle( ArticleType $article ): static
+	{
+		$this->article	= $article;
+		$this->prefixes['article']	= 'https://ogp.me/ns/article#';
+		return $this;
+	}
+
+	public function setBook( BookType $book ): static
+	{
 		$this->book	= $book;
-		$this->prefixes['book']	= 'http://ogp.me/ns/book#';
+		$this->prefixes['book']	= 'https://ogp.me/ns/book#';
+		return $this;
 	}
 
-	public function setProfile( Type\Profile $profile ){
-		$this->profile	= $profile;
-		$this->prefixes['profile']	= 'http://ogp.me/ns/profile#';
+	public function setProfile( ProfileType $profile ): static
+	{		$this->profile	= $profile;
+		$this->prefixes['profile']	= 'https://ogp.me/ns/profile#';
+		return $this;
 	}
 
-	public function setDescription( $description ){
+	public function setDescription( string $description ): static
+	{
 		$this->description	= htmlentities( $description, ENT_COMPAT, 'UTF-8' );
+		return $this;
 	}
 
-	public function setTitle( $title ){
+	public function setTitle( string $title ): static
+	{
 		$this->title	= htmlentities( $title, ENT_COMPAT, 'UTF-8' );
+		return $this;
 	}
 
-	public function setType( $type ){
+	public function setType( string $type ): static
+	{
 		if( !in_array( $type, $this->types, TRUE ) )
-			throw new \OutOfRangeException( 'Type no supported' );
+			throw new OutOfRangeException( 'Type no supported' );
 		$this->type		= $type;
+		return $this;
 	}
 
-	public function setUrl( $url ){
+	public function setUrl( string $url ): static
+	{
 		$this->url	= addslashes( $url );
+		return $this;
 	}
 }
-?>

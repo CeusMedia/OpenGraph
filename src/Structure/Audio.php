@@ -28,7 +28,7 @@ declare(strict_types=1);
  */
 namespace CeusMedia\OpenGraph\Structure;
 
-use ADT_List_Dictionary as Dictionary;
+use CeusMedia\Common\ADT\Collection\Dictionary;
 
 /**
  *	Generator for OpenGraph markup.
@@ -41,14 +41,14 @@ use ADT_List_Dictionary as Dictionary;
  */
 class Audio
 {
-	protected $url;
-	protected $urlSecure;
-	protected $type;
+	protected string $url;
+	protected ?string $urlSecure	= NULL;
+	protected ?string $type			= NULL;
 
-	public function __construct( $url, ?string $mimeType = NULL )
+	public function __construct( string $url, ?string $mimeType = NULL )
 	{
 		$this->setUrl( $url );
-		if( $mimeType !== NULL )
+		if( NULL !== $mimeType )
 			$this->setType( $mimeType );
 	}
 
@@ -67,19 +67,19 @@ class Audio
 		return $this->url;
 	}
 
-	public function setSecureUrl( string $url ): self
+	public function setSecureUrl( string $url ): static
 	{
 		$this->urlSecure	= $url;
 		return $this;
 	}
 
-	public function setType( $mimeType ): self
+	public function setType( string $mimeType ): static
 	{
 		$this->type	= $mimeType;
 		return $this;
 	}
 
-	public function setUrl( $url ): self
+	public function setUrl( string $url ): static
 	{
 		$this->url	= $url;
 		return $this;
@@ -89,9 +89,9 @@ class Audio
 	{
 		$prefix	= 'og:audio';
 		$map	= new Dictionary( [$prefix => $this->url] );
-		if( $this->urlSecure )
+		if( NULL !== $this->urlSecure )
 			$map->set( $prefix.':secure_url', $this->urlSecure );
-		if( $this->type )
+		if( NULL !== $this->type )
 			$map->set( $prefix.':type', $this->type );
 		return $map->getAll();
 	}

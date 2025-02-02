@@ -28,6 +28,8 @@ declare(strict_types=1);
  */
 namespace CeusMedia\OpenGraph;
 
+use CeusMedia\Common\UI\HTML\Tag as HtmlTag;
+
 /**
  *	Renderer for OpenGraph markup.
  *	@category		Library
@@ -39,8 +41,8 @@ namespace CeusMedia\OpenGraph;
  */
 class Renderer
 {
-	public static $linePrefix	= "    ";
-	public static $lineSuffix	= "\n";
+	public static string $linePrefix	= "    ";
+	public static string $lineSuffix	= "\n";
 
 	public static function render( Node $node, bool $withComments = TRUE ): string
 	{
@@ -60,19 +62,18 @@ class Renderer
 		foreach( $node->getVideos() as $video )
 			foreach( $video->toArray() as $property => $content )
 				self::enlist( $list, $property, $content );
-		if( $node->getProfile() )
+		if( NULL !== $node->getProfile() )
 			foreach( $node->getProfile()->toArray() as $property => $content )
 				self::enlist( $list, $property, $content );
-		if( $node->getArticle() )
+		if( NULL !== $node->getArticle() )
 			foreach( $node->getArticle()->toArray() as $property => $content )
 				self::enlist( $list, $property, $content );
-		if( $node->getBook() )
+		if( NULL !== $node->getBook() )
 			foreach( $node->getBook()->toArray() as $property => $content )
 				self::enlist( $list, $property, $content );
-		if( $node->getCustomProperties() )
-			foreach( $node->getCustomProperties() as $property => $contents )
-				foreach( $contents as $content )
-					self::enlist( $list, $property, $content );
+		foreach( $node->getCustomProperties() as $property => $contents )
+			foreach( $contents as $content )
+				self::enlist( $list, $property, $content );
 		if( $withComments )
 			$list[]	= '<!-- OpenGraph End -->';
 		$list	= join( self::$lineSuffix . self::$linePrefix, $list );
@@ -87,11 +88,11 @@ class Renderer
 		return join( ' ', $list );
 	}
 
-	protected static function enlist( &$list, string $property, string $content ): void
+	protected static function enlist( array &$list, string $property, string $content ): void
 	{
 		if( strlen( trim( $content ) ) === 0 )
 			return;
-		$list[]	= \UI_HTML_Tag::create( 'meta', NULL, array(
+		$list[]	= HtmlTag::create( 'meta', NULL, array(
 			'property'	=> $property,
 			'content'	=> addslashes( $content )
 		) );

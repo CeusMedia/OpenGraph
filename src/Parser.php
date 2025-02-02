@@ -28,6 +28,11 @@ declare(strict_types=1);
  */
 namespace CeusMedia\OpenGraph;
 
+use CeusMedia\Common\XML\Element as XmlElement;
+use CeusMedia\OpenGraph\Structure\Audio as AudioStructure;
+use CeusMedia\OpenGraph\Structure\Image as ImageStructure;
+use CeusMedia\OpenGraph\Structure\Video as VideoStructure;
+
 /**
  *	Parser for OpenGraph markup.
  *	@category		Library
@@ -43,7 +48,7 @@ class Parser
 	{
 		$html	= preg_replace( "/^.*<head>/is", "", $html );
 		$html	= preg_replace( "/<\/head>.*$/is", "", $html );
-		$xml	= new \XML_Element( '<metas>'.$html.'</metas>' );
+		$xml	= new XmlElement( '<metas>'.$html.'</metas>' );
 		$node	= NULL;
 		$audios	= [];
 		$images	= [];
@@ -52,8 +57,8 @@ class Parser
 			if( $metaTag->hasAttribute( 'property' ) && $metaTag->hasAttribute( 'content' ) ){
 				$property	= $metaTag->getAttribute( 'property' );
 				$content	= $metaTag->getAttribute( 'content' );
-				if( substr( $property, 0, 3 ) === "og:" ){
-					if( is_null( $node ) && $property === "og:url" )
+				if( str_starts_with( $property, 'og:' ) ){
+					if( is_null( $node ) && 'og:url' === $property )
 						$node	= new Node( $content );
 					else{
 						switch( $property ){
@@ -67,63 +72,63 @@ class Parser
 								$node->setDescription( $content );
 								break;
 							case 'og:audio':
-								$audios[]	= new \CeusMedia\OpenGraph\Structure\Audio( $content );
+								$audios[]	= new AudioStructure( $content );
 								break;
 							case 'og:audio:type':
 								$audio	= array_pop( $audios );
 								$audio->setType( $content );
-								array_push( $audios, $audio );
+								$audios[] = $audio;
 								break;
 							case 'og:audio:secure_url':
 								$audio	= array_pop( $audios );
 								$audio->setSecureUrl( $content );
-								array_push( $audios, $audio );
+								$audios[] = $audio;
 								break;
 							case 'og:image':
-								$images[]	= new \CeusMedia\OpenGraph\Structure\Image( $content );
+								$images[]	= new ImageStructure( $content );
 								break;
 							case 'og:image:width':
 								$image	= array_pop( $images );
 								$image->setWidth( (int) $content );
-								array_push( $images, $image );
+								$images[] = $image;
 								break;
 							case 'og:image:height':
 								$image	= array_pop( $images );
 								$image->setHeight( (int) $content );
-								array_push( $images, $image );
+								$images[] = $image;
 								break;
 							case 'og:image:type':
 								$image	= array_pop( $images );
 								$image->setType( $content );
-								array_push( $images, $image );
+								$images[] = $image;
 								break;
 							case 'og:image:secure_url':
 								$image	= array_pop( $images );
 								$image->setSecureUrl( $content );
-								array_push( $images, $image );
+								$images[] = $image;
 								break;
 							case 'og:video':
-								$videos[]	= new \CeusMedia\OpenGraph\Structure\Video( $content );
+								$videos[]	= new VideoStructure( $content );
 								break;
 							case 'og:video:width':
 								$video	= array_pop( $videos );
 								$video->setWidth( (int) $content );
-								array_push( $videos, $video );
+								$videos[] = $video;
 								break;
 							case 'og:video:height':
 								$video	= array_pop( $videos );
 								$video->setHeight( (int) $content );
-								array_push( $videos, $video );
+								$videos[] = $video;
 								break;
 							case 'og:video:type':
 								$video	= array_pop( $videos );
 								$video->setType( $content );
-								array_push( $videos, $video );
+								$videos[] = $video;
 								break;
 							case 'og:video:secure_url':
 								$video	= array_pop( $videos );
 								$video->setSecureUrl( $content );
-								array_push( $videos, $video );
+								$videos[] = $video;
 								break;
 						}
 					}
